@@ -48,12 +48,13 @@ const (
 
 //GBC represents the hardware device of the GameBoy Color
 type GBC struct {
-	// Cartridge is the current cartridge file that is loaded
-	Cartridge memory.Memory // Cartridge is from 0x0000 to 0x8000
+	//Cartridge is the current cartridge file that is loaded
+	//Cartridge Memory ranges from address 0x0000 to 0x8000
+	Cartridge memory.Memory
 }
 
 //ReadMemory wraps the various read memory structs we have in the GBC struct.
-// This will check the address and verify it will be accessing the correct memory location
+//This will check the address and verify it will be accessing the correct memory location
 func (g *GBC) ReadMemory(addr uint16) byte {
 	if addr < ROMBankEnd {
 		return g.Cartridge.Read(addr)
