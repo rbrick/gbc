@@ -93,7 +93,23 @@ func (g *GBC) ReadMemory(addr uint16) byte {
 //WriteMemory wraps the various writable memory structs we have in the GBC struct.
 //This will check the address and verify it will be writing to the correct memory location
 func (g *GBC) WriteMemory(addr uint16, data byte) {
-	return
+	if addr >= ExternalRAMBankStart && addr < ExternalRAMBankEnd {
+		g.ExternalRAM.Write(addr-ExternalRAMBankStart, data)
+	} else if addr >= VideoRAMStart && addr < VideoRAMEnd {
+		g.VideoRAM.Write(addr-VideoRAMStart, data)
+	} else if (addr >= WorkingRAMStart && addr < WorkingRAMEnd) || (addr >= EchoRAMStart && addr < EchoRAMEnd) {
+		// WorkingRAM and EchoRAM are basically the same thing. EchoRAM shouldn't be used but if it is, just treat it
+		// as working RAM
+		if addr >= EchoRAMStart && addr < EchoRAMEnd {
+			g.WorkingRAM.Write(addr-WorkingRAMStart, data)
+		} else {
+			g.WorkingRAM.Write(addr-WorkingRAMStart, data)
+		}
+	} else if addr >= SpriteAttribMemoryStart && addr < SpriteAttribMemoryEnd {
+		//-1 // TODO: Implement GPU
+	} else if addr >= HighRAMStart && addr < HighRAMEnd {
+		g.HighRAM.Write(addr-HighRAMStart, data)
+	}
 }
 
 //Reset will reset the GBC.
