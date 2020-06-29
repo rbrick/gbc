@@ -1,0 +1,8 @@
+*.gbc
+*.exe
+*.o
+*.dll
+.idea/
+*.s
+*.so
+vendor/
