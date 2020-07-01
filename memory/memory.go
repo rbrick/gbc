@@ -3,6 +3,7 @@ package memory
 //Memory represents data that can always be read from.
 type Memory interface {
 	Read(addr uint16) byte
+	Raw() []byte
 }
 
 //WritableMemory represents an area of memory that can be written to
@@ -25,6 +26,10 @@ func (r *RAM) Read(addr uint16) byte {
 	return r.memory[addr] // read the data from the array
 }
 
+func (r *RAM) Raw() []byte {
+	return r.memory
+}
+
 func AllocateRAM(memorySize int) WritableMemory {
 	return &RAM{memory: make([]byte, memorySize)}
 }
@@ -37,6 +42,10 @@ type ROM struct {
 
 func (r *ROM) Read(addr uint16) byte {
 	return r.memory[addr]
+}
+
+func (r *ROM) Raw() []byte {
+	return r.memory
 }
 
 func AllocateROM(data []byte) Memory {

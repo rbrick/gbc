@@ -83,7 +83,7 @@ func (g *GBC) ReadMemory(addr uint16) byte {
 		}
 		return g.WorkingRAM.Read(addr - WorkingRAMStart)
 	} else if addr >= SpriteAttribMemoryStart && addr < SpriteAttribMemoryEnd {
-		return -1 // TODO: Implement GPU
+		return 0 // TODO: Implement GPU
 	} else if addr >= HighRAMStart && addr < HighRAMEnd {
 		return g.HighRAM.Read(addr - HighRAMStart)
 	}
@@ -128,6 +128,10 @@ func (g *GBC) LoadCartridge(path string) error {
 
 	g.Cartridge = memory.AllocateROM(data)
 	return nil
+}
+
+func (g *GBC) CartridgeName() string {
+	return string(g.Cartridge.Raw()[0x0134:0x0142])
 }
 
 //NewGBC creates a new instance of the GameBoy Color
