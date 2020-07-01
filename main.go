@@ -3,7 +3,10 @@ package main
 import (
 	"fmt"
 	"github.com/rbrick/gbc/hardware"
+	"github.com/rbrick/gbc/render"
+	"github.com/veandco/go-sdl2/sdl"
 	"log"
+	"sync"
 )
 
 func main() {
@@ -17,4 +20,15 @@ func main() {
 	}
 
 	fmt.Println(gameboyColor.CartridgeName())
+
+	fb := render.NewFrameBuffer(800, 600, "Test")
+
+	sdl.Main(func() {
+		fb.Run()
+	})
+
+	var wg sync.WaitGroup
+	wg.Add(1)
+
+	wg.Wait()
 }
