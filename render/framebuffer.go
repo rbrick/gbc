@@ -63,41 +63,43 @@ func (fb *FrameBuffer) Run() int {
 
 		var wg sync.WaitGroup
 		wg.Add(1)
-		sdl.Do(func() {
-			centerX := float64(fb.Bounds.Dx() / 2)
-			centerY := float64(fb.Bounds.Dy() / 2)
-			outerRadius := float64(256)
+		go func() {
+			sdl.Do(func() {
+				centerX := float64(fb.Bounds.Dx() / 2)
+				centerY := float64(fb.Bounds.Dy() / 2)
+				outerRadius := float64(256)
 
-			segments := float64(36)
-			angle := 360 / segments
+				segments := float64(36)
+				angle := 360 / segments
 
-			for i := segments; i > 0; i-- {
-				cos := math.Cos(mathutil.ToRadians(i * angle))
-				sin := math.Sin(mathutil.ToRadians(i*angle + xpos))
+				for i := segments; i > 0; i-- {
+					cos := math.Cos(mathutil.ToRadians(i * angle))
+					sin := math.Sin(mathutil.ToRadians(i*angle + xpos))
 
-				x := cos * 100
-				y := sin * 100
+					x := cos * 100
+					y := sin * 100
 
-				travelX := cos * outerRadius
-				travelY := sin * outerRadius
+					travelX := cos * outerRadius
+					travelY := sin * outerRadius
 
-				v := mathutil.ToRadians((i-1)*angle + xpos)
-				nextX := math.Cos(v) * outerRadius
-				nextY := math.Sin(v) * outerRadius
+					v := mathutil.ToRadians((i-1)*angle + xpos)
+					nextX := math.Cos(v) * outerRadius
+					nextY := math.Sin(v) * outerRadius
 
-				points := make([]sdl.FPoint, 4)
+					points := make([]sdl.FPoint, 4)
 
-				points[0] = sdl.FPoint{X: float32(x + centerX), Y: float32(y + centerY)} // the tip
-				points[1] = sdl.FPoint{X: float32(travelX + centerX), Y: float32(travelY + centerY)}
-				points[2] = sdl.FPoint{X: float32(nextX + centerX), Y: float32(nextY + centerY)}
-				points[3] = points[0]
+					points[0] = sdl.FPoint{X: float32(x + centerX), Y: float32(y + centerY)} // the tip
+					points[1] = sdl.FPoint{X: float32(travelX + centerX), Y: float32(travelY + centerY)}
+					points[2] = sdl.FPoint{X: float32(nextX + centerX), Y: float32(nextY + centerY)}
+					points[3] = points[0]
 
-				fb.Renderer.SetDrawColor(0xFF, 0, 0, 0xFF)
-				fb.Renderer.DrawLinesF(points)
-			}
+					fb.Renderer.SetDrawColor(0xFF, 0, 0, 0xFF)
+					fb.Renderer.DrawLinesF(points)
+				}
 
-			wg.Done()
-		})
+				wg.Done()
+			})
+		}()
 
 		wg.Wait()
 
