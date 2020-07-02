@@ -6,6 +6,7 @@ import (
 	"github.com/rbrick/gbc/render"
 	"github.com/veandco/go-sdl2/sdl"
 	"log"
+	"os"
 	"sync"
 )
 
@@ -23,12 +24,16 @@ func main() {
 
 	fb := render.NewFrameBuffer(800, 600, "Test")
 
+	exitCode := 0
+
 	sdl.Main(func() {
-		fb.Run()
+		exitCode = fb.Run()
 	})
 
 	var wg sync.WaitGroup
 	wg.Add(1)
 
 	wg.Wait()
+
+	os.Exit(exitCode)
 }
