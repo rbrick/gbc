@@ -14,7 +14,6 @@ func (f FlagRegister) Test(position int) bool {
 }
 
 func (f *FlagRegister) Set(position int, v bool) {
-	//var n uint8 = 0
 	if v {
 		*f = *f | (1 << position)
 	} else {
