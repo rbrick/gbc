@@ -1,6 +1,29 @@
 package hardware
 
+const (
+	FlagCarryPosition = iota + 4
+	FlagHalfCarryPosition
+	FlagSubtractPosition
+	FlagZeroPosition
+)
+
+var FlagPositions = [4]int{FlagCarryPosition, FlagHalfCarryPosition, FlagSubtractPosition, FlagZeroPosition}
+
 type FlagRegister uint8
+
+func (f FlagRegister) Test(position int) bool {
+	return (f>>position)&1 != 0
+}
+
+func (f *FlagRegister) Set(position int, v bool) {
+	//var n uint8 = 0
+	if v {
+		*f = *f | (1 << position)
+	} else {
+		*f = FlagRegister(uint8(*f) & uint8(^position))
+	}
+
+}
 
 //Registers represents all the registers the GBC contains.
 // GBC contains eight 8-bit registers ( A, B, C, D, E, F, H, L) and two 16-bit registers (SP (StackPointer), PC (Program Counter))
