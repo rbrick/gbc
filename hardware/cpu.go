@@ -7,8 +7,6 @@ const (
 	FlagZeroPosition
 )
 
-var FlagPositions = [4]int{FlagCarryPosition, FlagHalfCarryPosition, FlagSubtractPosition, FlagZeroPosition}
-
 type FlagRegister uint8
 
 func (f FlagRegister) Test(position int) bool {
